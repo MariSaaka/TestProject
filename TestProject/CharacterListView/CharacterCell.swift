@@ -31,7 +31,7 @@ class CharacterCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
-        stackView.alignment = .leading
+        stackView.alignment = .center
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -39,7 +39,7 @@ class CharacterCell: UITableViewCell {
     private var characterName: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -48,7 +48,7 @@ class CharacterCell: UITableViewCell {
     private var characterGender: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -124,7 +124,16 @@ class CharacterCell: UITableViewCell {
     func configure(with model: Model) {
         self.characterName.text = model.name
         self.characterGender.text = model.status
-        self.characterImage.image = model.image
+        ImageManager.downloadImage(from: model.image) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    self.characterImage.image = image
+                }
+            case .failure(_ ):
+                break
+            }
+        }
     }
     
 }
@@ -134,6 +143,6 @@ extension CharacterCell {
     struct CellModel {
         let name: String
         let status: String
-        let image: UIImage
+        var image: String
     }
 }

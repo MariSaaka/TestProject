@@ -24,6 +24,8 @@
 		90196C4D2A6D3DFE008C0841 /* CharacterDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C4C2A6D3DFE008C0841 /* CharacterDetailViewController.swift */; };
 		90196C502A6D4957008C0841 /* CharacterDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C4F2A6D4957008C0841 /* CharacterDataManager.swift */; };
 		90196C522A6DA234008C0841 /* ContactDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C512A6DA234008C0841 /* ContactDetailCell.swift */; };
+		90196C542A6F1361008C0841 /* CharacterDetailPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C532A6F1361008C0841 /* CharacterDetailPresenter.swift */; };
+		90196C562A7056F8008C0841 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C552A7056F8008C0841 /* ImageManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,8 @@
 		90196C4C2A6D3DFE008C0841 /* CharacterDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewController.swift; sourceTree = "<group>"; };
 		90196C4F2A6D4957008C0841 /* CharacterDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDataManager.swift; sourceTree = "<group>"; };
 		90196C512A6DA234008C0841 /* ContactDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactDetailCell.swift; sourceTree = "<group>"; };
+		90196C532A6F1361008C0841 /* CharacterDetailPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailPresenter.swift; sourceTree = "<group>"; };
+		90196C552A7056F8008C0841 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +174,7 @@
 			children = (
 				90196C4C2A6D3DFE008C0841 /* CharacterDetailViewController.swift */,
 				90196C512A6DA234008C0841 /* ContactDetailCell.swift */,
+				90196C532A6F1361008C0841 /* CharacterDetailPresenter.swift */,
 			);
 			path = CharacterDetailView;
 			sourceTree = "<group>";
@@ -178,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				90196C472A6BFB37008C0841 /* RickAndMortyAPIClient.swift */,
+				90196C552A7056F8008C0841 /* ImageManager.swift */,
 				90196C4F2A6D4957008C0841 /* CharacterDataManager.swift */,
 			);
 			path = Networking;
@@ -319,12 +325,14 @@
 				90196C102A69C839008C0841 /* AppDelegate.swift in Sources */,
 				90196C502A6D4957008C0841 /* CharacterDataManager.swift in Sources */,
 				90196C522A6DA234008C0841 /* ContactDetailCell.swift in Sources */,
+				90196C542A6F1361008C0841 /* CharacterDetailPresenter.swift in Sources */,
 				90196C4A2A6C00D9008C0841 /* CharacterListViewConfiguration.swift in Sources */,
 				90196C482A6BFB37008C0841 /* RickAndMortyAPIClient.swift in Sources */,
 				90196C122A69C839008C0841 /* SceneDelegate.swift in Sources */,
 				90196C402A6BDC5E008C0841 /* CharacterCell.swift in Sources */,
 				90196C4D2A6D3DFE008C0841 /* CharacterDetailViewController.swift in Sources */,
 				90196C422A6BE8A7008C0841 /* Characters.swift in Sources */,
+				90196C562A7056F8008C0841 /* ImageManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

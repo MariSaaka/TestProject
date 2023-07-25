@@ -8,24 +8,35 @@
 import UIKit
 
 protocol CharacterDataManagerProtocol {
-    func startFetchData(handler: @escaping  ((Result<[Character], Error>) -> Void))
-    func downloadImage(string: String, handler: @escaping ((Result<UIImage, Error>) -> Void))
+    func startFetchData(with url: URL, handler: @escaping  ((Result<[Character], Error>) -> Void))
+    func numberOfCharacters() -> Int
 }
 
 class CharacterDataManager: CharacterDataManagerProtocol {
-   
-    
+
+    var characters: [Character] = []
     let apiClient = RickAndMortyAPIClient()
     
-    func startFetchData(handler: @escaping ((Result<[Character], Error>) -> Void)) {
-        apiClient.fetchCharacters { result in
+    func startFetchData(with url: URL, handler: @escaping ((Result<[Character], Error>) -> Void)) {
+        apiClient.fetchCharacters(with: url) { result in
+            switch result {
+            case .success(let response):
+                self.characters = response
+            case .failure(let error):
+                print(error)
+            }
             handler(result)
         }
     }
     
-    func downloadImage(string: String, handler: @escaping ((Result<UIImage, Error>) -> Void)) {
-        apiClient.downloadImage(from: string) { result in
-            handler(result)
-        }
+    func numberOfCharacters() -> Int {
+        return characters.count
+    }
+    
+    func getCharacterModel(at index: IndexPath) -> CharacterCell.CellModel{
+        let character = characters[index.row]
+        return .init(name: character.name,
+                     status: character.status,
+                     image: character.image)
     }
 }

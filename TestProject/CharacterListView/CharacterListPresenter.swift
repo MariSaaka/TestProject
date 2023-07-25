@@ -5,23 +5,20 @@
 //  Created by Mariam Saakashvili on 22/7/23.
 //
 
-import UIKit
+import Foundation
 
 protocol CharacterListPresenter {
     var view: CharacterListViewProtocol? { get set }
-    func viewDidLoad()
+    func viewDidLoad(with url: URL)
     func numberOfCharacters() -> Int
-    func getCharacterInfo(at index: IndexPath) -> Character
-    func getCharacterImage(at index: IndexPath) -> UIImage
+    func getCharacterInfo(at index: IndexPath) -> CharacterCell.CellModel
     func fetchMoreList()
     func showCharacterDetails()
 }
 
 
 class CharacterListImplementation: CharacterListPresenter {
-
-    private var characters: [Character] = []
-    private var characterImages: [UIImage] = []
+    
     weak var view: CharacterListViewProtocol?
     var characterManager: CharacterDataManager
     
@@ -30,40 +27,24 @@ class CharacterListImplementation: CharacterListPresenter {
         self.characterManager = manager
     }
     
-    func viewDidLoad() {
-        characterManager.startFetchData { result in
+    func viewDidLoad(with url: URL) {
+        characterManager.startFetchData(with: url) { result in
             switch result {
-            case .success(let characters):
-                self.characters = characters
+            case .success(_ ):
+                self.view?.updateList()
             case .failure(let error):
                 print(error)
             }
         }
     }
     
-    func getCharacterInfo(at index: IndexPath) -> Character {
-        return characters[index.row]
-    }
-    
-    func getCharacterImage(at index: IndexPath) -> UIImage {
-        var resultImage: UIImage?
-        let characterImage = characters[index.row].image
-        self.characterManager.downloadImage(string: characterImage) { result in
-            switch result {
-            case .success(let image):
-                resultImage = image
-                print("Image downloaded successfully.")
-            case .failure(let error):
-                print(error)
-            }
-        }
-        return resultImage ?? UIImage(systemName: "heart.fill")!
+    func getCharacterInfo(at index: IndexPath) -> CharacterCell.CellModel {
+        return characterManager.getCharacterModel(at: index)
     }
     
     func numberOfCharacters() -> Int {
-        return characters.count
+        return characterManager.numberOfCharacters()
     }
-    
     
     func fetchMoreList() {
         self.view?.updateList()

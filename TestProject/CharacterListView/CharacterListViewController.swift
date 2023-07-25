@@ -10,6 +10,7 @@ import UIKit
 
 protocol CharacterListViewProtocol: AnyObject {
     func updateList()
+    func updateImage(at index: IndexPath)
 }
 
 class CharacterListViewController: UIViewController {
@@ -45,7 +46,7 @@ class CharacterListViewController: UIViewController {
         setUpNavigation()
         setUpTableView()
         setUpSearchBar()
-        presenter.viewDidLoad()
+        fetchList()
     }
 
     // MARK: - Private Functions
@@ -80,6 +81,11 @@ class CharacterListViewController: UIViewController {
         searchBar = UISearchBar(frame: frame)
         tableView.tableHeaderView = searchBar
     }
+    
+    private func fetchList() {
+        let url = URL(string: "https://rickandmortyapi.com/api/character")!
+        presenter.viewDidLoad(with: url)
+    }
 }
 
 
@@ -91,30 +97,40 @@ extension CharacterListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterCell") as! CharacterCell
-        let character = presenter.getCharacterInfo(at: indexPath)
-        let characterImage = presenter.getCharacterImage(at: indexPath)
-        cell.configure(with: .init(name: character.name, status: character.gender, image: characterImage))
+        let characterModel = presenter.getCharacterInfo(at: indexPath)
+        cell.configure(with: characterModel)
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = CharacterDetailViewController()
-        self.navigationController?.pushViewController(vc, animated: true)
+        
     }
 }
 
 
 // MARK: - UISearchBarDelegate
 extension CharacterListViewController: UISearchBarDelegate {
+    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.resignFirstResponder()
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let url = URL(string: "https://rickandmortyapi.com/api/character/?name=rick")!
+        presenter.viewDidLoad(with: url)
         searchBar.resignFirstResponder()
     }
 }
 
 // MARK: - CharacterListViewProtocol
 extension CharacterListViewController: CharacterListViewProtocol {
+    func updateImage(at index: IndexPath) {
+        self.tableView.reloadRows(at: [index], with: .automatic)
+    }
+    
     func updateList() {
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }
 
