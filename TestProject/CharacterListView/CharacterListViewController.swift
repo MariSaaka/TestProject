@@ -10,7 +10,7 @@ import UIKit
 
 protocol CharacterListViewProtocol: AnyObject {
     func updateList()
-    func updateImage(at index: IndexPath)
+    func updateImage(at index: Int)
 }
 
 class CharacterListViewController: UIViewController {
@@ -43,6 +43,8 @@ class CharacterListViewController: UIViewController {
     // MARK: - ViewLifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        let router = CharacterListViewRouter(with: self)
+        presenter.router = router
         setUpNavigation()
         setUpTableView()
         setUpSearchBar()
@@ -83,7 +85,7 @@ class CharacterListViewController: UIViewController {
     }
     
     private func fetchList() {
-        let url = URL(string: "https://rickandmortyapi.com/api/character")!
+        let url = URL(string: "https://rickandmortyapi.com/api/character/")!
         presenter.viewDidLoad(with: url)
     }
 }
@@ -97,7 +99,7 @@ extension CharacterListViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterCell") as! CharacterCell
-        let characterModel = presenter.getCharacterInfo(at: indexPath)
+        let characterModel = presenter.getCharacterInfo(at: indexPath.row)
         cell.configure(with: characterModel)
         return cell
     }
@@ -123,8 +125,8 @@ extension CharacterListViewController: UISearchBarDelegate {
 
 // MARK: - CharacterListViewProtocol
 extension CharacterListViewController: CharacterListViewProtocol {
-    func updateImage(at index: IndexPath) {
-        self.tableView.reloadRows(at: [index], with: .automatic)
+    func updateImage(at index: Int) {
+        self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
     }
     
     func updateList() {

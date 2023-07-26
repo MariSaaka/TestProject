@@ -23,6 +23,7 @@ struct Character: Codable {
     let species: String
     let gender: String
     let image: String
+//    let location: Location
     let episodes: [String]
     let url: String
     
@@ -34,7 +35,19 @@ struct Character: Codable {
         case species = "species"
         case gender = "gender"
         case image = "image"
+//        case location = "location"
         case episodes = "episode"
         case url = "url"
     }
 }
+
+
+//struct Location: Codable {
+//    let name: String
+//    let url: URL
+//
+//    enum CodingKeys: String, CodingKey {
+//        case name = "name"
+//        case url = "url"
+//    }
+//}

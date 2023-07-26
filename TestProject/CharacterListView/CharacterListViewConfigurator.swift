@@ -7,7 +7,7 @@
 
 import Foundation
 
-class CharacterListViewConfiguration {
+class CharacterListViewConfigurator {
     func createInitialViewController() -> CharacterListViewController {
         let manager = CharacterDataManager()
         var presenter: CharacterListPresenter = CharacterListImplementation(manager: manager)
@@ -15,6 +15,7 @@ class CharacterListViewConfiguration {
         presenter.view = initialViewController
         return initialViewController
     }
+    
 }
 
 

@@ -9,18 +9,19 @@ import Foundation
 
 protocol CharacterListPresenter {
     var view: CharacterListViewProtocol? { get set }
+    var router: CharacterListViewRouter? { get set }
     func viewDidLoad(with url: URL)
     func numberOfCharacters() -> Int
-    func getCharacterInfo(at index: IndexPath) -> CharacterCell.CellModel
+    func getCharacterInfo(at index: Int) -> CharacterCell.CellModel
     func fetchMoreList()
     func showCharacterDetails()
 }
 
 
 class CharacterListImplementation: CharacterListPresenter {
-    
     weak var view: CharacterListViewProtocol?
     var characterManager: CharacterDataManager
+    var router: CharacterListViewRouter?
     
     
     init(manager: CharacterDataManager) {
@@ -38,13 +39,17 @@ class CharacterListImplementation: CharacterListPresenter {
         }
     }
     
-    func getCharacterInfo(at index: IndexPath) -> CharacterCell.CellModel {
+    func getCharacterInfo(at index: Int) -> CharacterCell.CellModel {
         return characterManager.getCharacterModel(at: index)
     }
     
     func numberOfCharacters() -> Int {
         return characterManager.numberOfCharacters()
     }
+    
+//    func getChar() -> Character {
+//        return characterManager.getCharacter()
+//    }
     
     func fetchMoreList() {
         self.view?.updateList()

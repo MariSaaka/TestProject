@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RickAndMortyAPIClient {
+class RickAndMortyAPIManager {
     func fetchCharacters(with url: URL, completion: @escaping ((Result<[Character], Error>) -> Void)) {
         let urlRequest = URLRequest(url: url)
         
