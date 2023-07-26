@@ -9,10 +9,22 @@ import Foundation
 
 
 struct Characters: Codable {
+    let info: Info
     let charactersResults: [Character]
     
     enum CodingKeys: String, CodingKey {
+        case info = "info"
         case charactersResults = "results"
+    }
+}
+
+struct Info: Codable {
+    let count: Int
+    let pages: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case count = "count"
+        case pages = "pages"
     }
 }
 
@@ -23,7 +35,7 @@ struct Character: Codable {
     let species: String
     let gender: String
     let image: String
-//    let location: Location
+    let location: Location
     let episodes: [String]
     let url: String
     
@@ -35,19 +47,19 @@ struct Character: Codable {
         case species = "species"
         case gender = "gender"
         case image = "image"
-//        case location = "location"
+        case location = "location"
         case episodes = "episode"
         case url = "url"
     }
 }
 
 
-//struct Location: Codable {
-//    let name: String
-//    let url: URL
-//
-//    enum CodingKeys: String, CodingKey {
-//        case name = "name"
-//        case url = "url"
-//    }
-//}
+struct Location: Codable {
+    let name: String
+    let url: String
+
+    enum CodingKeys: String, CodingKey {
+        case name = "name"
+        case url = "url"
+    }
+}

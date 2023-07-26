@@ -13,16 +13,25 @@ class CharacterDetailCell: UICollectionViewCell {
     
     private var mainStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.distribution = .fillProportionally
+        stackView.axis = .vertical
+        stackView.distribution = .fill
         stackView.alignment = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
+    private var imageInputView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            view.widthAnchor.constraint(equalToConstant: 220),
+            view.heightAnchor.constraint(equalToConstant: 220)
+        ])
+        return view
+    }()
+    
     private var characterImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.layer.cornerRadius = 8
         imageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             imageView.widthAnchor.constraint(equalToConstant: 200),
@@ -43,6 +52,7 @@ class CharacterDetailCell: UICollectionViewCell {
     private var characterName: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
+        label.font = .boldSystemFont(ofSize: 20)
         label.textAlignment = .left
         label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -96,12 +106,42 @@ class CharacterDetailCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let margins = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
+        contentView.frame = contentView.frame.inset(by: margins)
+        contentView.layer.cornerRadius = 8
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowRadius = 5
+        contentView.layer.shadowOpacity = 0.5
+        contentView.layer.shadowOffset = .zero
+        characterImage.layer.borderWidth = 1
+        characterImage.layer.masksToBounds = false
+        characterImage.clipsToBounds = true
+    }
+    
+    
     //MARK: - Private Functions
     private func setUp() {
+        supportDarkMode()
         addSubviews()
         addConstraints()
     }
     
+    private func supportDarkMode() {
+        contentView.backgroundColor =
+        UIColor { traitCollection in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                return UIColor(white: 0.3, alpha: 1.0)
+            default:
+                return UIColor(white: 1, alpha: 1.0)
+            }
+        }
+    }
+    
+   
     private func addSubviews() {
         setUpVerticalStackView()
         setUpHorizontalStackView()
@@ -118,16 +158,22 @@ class CharacterDetailCell: UICollectionViewCell {
     }
     
     private func setUpHorizontalStackView() {
-        mainStackView.addArrangedSubview(characterImage)
+        imageInputView.addSubview(characterImage)
+        mainStackView.addArrangedSubview(imageInputView)
         mainStackView.addArrangedSubview(verticalStackView)
     }
     
     private func addConstraints() {
         NSLayoutConstraint.activate([
+            characterImage.centerXAnchor.constraint(equalTo: imageInputView.centerXAnchor),
+            characterImage.centerYAnchor.constraint(equalTo: imageInputView.centerYAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
             mainStackView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
             mainStackView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
             mainStackView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor),
-            mainStackView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 8)
+            mainStackView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor)
         ])
     }
     

@@ -15,7 +15,6 @@ class CharacterListViewConfigurator {
         presenter.view = initialViewController
         return initialViewController
     }
-    
 }
 
 

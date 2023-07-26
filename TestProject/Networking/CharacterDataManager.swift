@@ -8,22 +8,25 @@
 import UIKit
 
 protocol CharacterDataManagerProtocol {
-    func startFetchData(with url: URL, handler: @escaping  ((Result<[Character], Error>) -> Void))
+    func startFetchData(with page: Int, handler: @escaping  ((Result<Characters, APIError>) -> Void))
     func numberOfCharacters() -> Int
     func getCharacterModel(at index: Int) -> CharacterCell.CellModel
-    func getCharacterDetails(at index: Int) -> CharacterDetailCell.CellModel
+    func getCharacterForNavigation(at index: Int) -> Character
+    func getMaxNumberOfpages() -> Int
 }
 
 class CharacterDataManager: CharacterDataManagerProtocol {
-
-    var characters: [Character] = []
-    let apiClient = RickAndMortyAPIManager()
     
-    func startFetchData(with url: URL, handler: @escaping ((Result<[Character], Error>) -> Void)) {
-        apiClient.fetchCharacters(with: url) { result in
+    let apiClient = RickAndMortyAPIManager()
+    var characters: [Character] = []
+    var pagesNumber: Int = 0
+    
+    func startFetchData(with page: Int, handler: @escaping ((Result<Characters, APIError>) -> Void)) {
+        apiClient.fetchCharacters(with: page) { result in
             switch result {
             case .success(let response):
-                self.characters = response
+                self.characters.append(contentsOf: response.charactersResults)
+                self.pagesNumber = response.info.pages
             case .failure(let error):
                 print(error)
             }
@@ -42,9 +45,12 @@ class CharacterDataManager: CharacterDataManagerProtocol {
                      image: character.image)
     }
     
-    func getCharacterDetails(at index: Int) -> CharacterDetailCell.CellModel {
-        let character =  characters[0]
-        let cellModel = CharacterDetailCell.CellModel.init(name: character.name, status: character.status, species: character.species, gender: character.gender, image: character.image, location: "")
-        return cellModel
+    func getMaxNumberOfpages() -> Int {
+        return pagesNumber
+    }
+    
+    func getCharacterForNavigation(at index: Int) -> Character {
+        let character =  characters[index]
+        return character
     }
 }

@@ -78,15 +78,28 @@ class CharacterCell: UITableViewCell {
         contentView.frame = contentView.frame.inset(by: margins)
         contentView.layer.cornerRadius = 8
         contentView.layer.borderWidth = 1
+        contentView.clipsToBounds = true
     }
     
     
     // MARK: -Private Functions
     private func setUpCell() {
+        supportDarkMode()
         addSubviews()
         addConstraints()
     }
     
+    private func supportDarkMode() {
+        contentView.backgroundColor =
+        UIColor { traitCollection in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                return UIColor(white: 0.3, alpha: 1.0)
+            default:
+                return UIColor(white: 1, alpha: 1.0)
+            }
+        }
+    }
     
     private func addSubviews() {
         setUpVerticalStackView()
@@ -135,7 +148,6 @@ class CharacterCell: UITableViewCell {
             }
         }
     }
-    
 }
 
 // MARK: - CellModel

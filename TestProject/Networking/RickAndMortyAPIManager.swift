@@ -7,22 +7,45 @@
 
 import UIKit
 
+enum APIError: Error {
+    case invalidUrl
+    case errorDecode
+    case failed(error: Error)
+    case unknownError
+}
+
 class RickAndMortyAPIManager {
-    func fetchCharacters(with url: URL, completion: @escaping ((Result<[Character], Error>) -> Void)) {
+    
+    var session: URLSessionDataTask?
+    
+    func fetchCharacters(with page: Int, completion: @escaping ((Result<Characters, APIError>) -> Void)) {
+        guard session == nil else { return }
+        var components = URLComponents(string: "https://rickandmortyapi.com/api/character")!
+        components.queryItems = [
+            URLQueryItem(name: "page", value: "\(page)"),
+        ]
+        guard let url = components.url else {
+            completion(.failure(.invalidUrl))
+            return
+        }
         let urlRequest = URLRequest(url: url)
         
-        URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+        session = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             guard let data = data, error == nil else {
-                completion(.failure(error ?? URLError(.badURL)))
+                completion(.failure(.errorDecode))
+                self.session = nil
                 return
             }
             do {
                 let decoder = JSONDecoder()
                 let response = try decoder.decode(Characters.self, from: data)
-                completion(.success(response.charactersResults))
+                self.session = nil
+                completion(.success(response))
             } catch {
-                completion(.failure(error))
+                self.session = nil
+                completion(.failure(.errorDecode))
             }
-        }.resume()
+        }
+        session?.resume()
     }
 }

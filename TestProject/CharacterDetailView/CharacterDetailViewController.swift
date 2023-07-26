@@ -32,7 +32,6 @@ class CharacterDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
-        presenter.viewDidLoad(characterId: characterId)
     }
 
     private func configureCollectionView() {
@@ -69,16 +68,17 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContactDetailCell", for: indexPath) as! CharacterDetailCell
-//            let character = presenter.getCharacterDetails(at: self.index)
-//            print(character)
-//            cell.configure(with: character)
+            let character = presenter.getCharacterDetails()
+//            let episodes = presenter.getEpisodes()
+            
+            cell.configure(with: character)
             return cell
         }
         return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.bounds.size.width, height: 200)
+        return CGSize(width: collectionView.bounds.size.width, height: 400)
         
     }
     

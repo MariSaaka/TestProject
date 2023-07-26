@@ -9,9 +9,8 @@ import Foundation
 
 protocol CharacterDetailPresenter {
     var view: CharacterDetailViewProtocol? { get set }
-    func viewDidLoad(characterId: Int)
-//    func getCharacterDetails(at index: Int) -> CharacterDetailCell.CellModel
-    
+    func getCharacterDetails() -> CharacterDetailCell.Model
+    func getEpisodes() -> [String]
 }
 
 class CharacterDetailImplementation: CharacterDetailPresenter {
@@ -22,21 +21,14 @@ class CharacterDetailImplementation: CharacterDetailPresenter {
     init(manager: CharacterDetailDataManager) {
         self.characterManager = manager
     }
-    
-    func viewDidLoad(characterId: Int) {
-//        let url = "https://rickandmortyapi.com/api/character/\(characterId)"
-//        characterManager.startFetchData(with: URL(string: url)!) { result in
-//            switch result {
-//            case.success(let characters):
-//                self.view?.setUpCharacterDetails()
-//            case .failure(let error):
-//                print(error)
-//            }
-//
-//        }
+
+    func getCharacterDetails() -> CharacterDetailCell.Model {
+        let characterModel = characterManager.getCharacterModel()
+        return characterModel
     }
     
-//    func getCharacterDetails(at index: Int) -> CharacterDetailCell.CellModel {
-//        return characterManager.getCharacterDetails(at: index)
-//    }
+    func getEpisodes() -> [String] {
+        return characterManager.getEpisodes()
+    }
+    
 }
