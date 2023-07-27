@@ -1,5 +1,5 @@
 //
-//  RickAndMortyAPIClient.swift
+//  RickAndMortyAPIManager.swift
 //  TestProject
 //
 //  Created by Mariam Saakashvili on 22/7/23.

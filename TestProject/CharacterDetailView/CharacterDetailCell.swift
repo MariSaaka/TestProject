@@ -117,6 +117,7 @@ class CharacterDetailCell: UICollectionViewCell {
         contentView.layer.shadowOpacity = 0.5
         contentView.layer.shadowOffset = .zero
         characterImage.layer.borderWidth = 1
+        characterImage.layer.cornerRadius = 8
         characterImage.layer.masksToBounds = false
         characterImage.clipsToBounds = true
     }

@@ -39,17 +39,20 @@ class CharacterDetailViewController: UIViewController {
         layout.scrollDirection = .vertical
         collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: layout)
         self.view.addSubview(collectionView)
+        addConstraints()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.register(CharacterDetailCell.self, forCellWithReuseIdentifier: "ContactDetailCell")
+    }
+    
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: self.view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
             collectionView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor)
         ])
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.register(CharacterDetailCell.self, forCellWithReuseIdentifier: "ContactDetailCell")
     }
-
 }
 
 extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
@@ -69,8 +72,6 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContactDetailCell", for: indexPath) as! CharacterDetailCell
             let character = presenter.getCharacterDetails()
-//            let episodes = presenter.getEpisodes()
-            
             cell.configure(with: character)
             return cell
         }

@@ -29,6 +29,7 @@
 		90196C582A706119008C0841 /* CharacterDetailViewConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C572A706119008C0841 /* CharacterDetailViewConfigurator.swift */; };
 		90196C5A2A7081FE008C0841 /* CharacterListViewRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C592A7081FE008C0841 /* CharacterListViewRouter.swift */; };
 		90196C5C2A7083CC008C0841 /* CharacterDetailDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C5B2A7083CC008C0841 /* CharacterDetailDataManager.swift */; };
+		90196C612A729BBD008C0841 /* Episode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90196C602A729BBD008C0841 /* Episode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		90196C572A706119008C0841 /* CharacterDetailViewConfigurator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailViewConfigurator.swift; sourceTree = "<group>"; };
 		90196C592A7081FE008C0841 /* CharacterListViewRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterListViewRouter.swift; sourceTree = "<group>"; };
 		90196C5B2A7083CC008C0841 /* CharacterDetailDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterDetailDataManager.swift; sourceTree = "<group>"; };
+		90196C602A729BBD008C0841 /* Episode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Episode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,9 +168,9 @@
 		90196C462A6BFA1E008C0841 /* CharacterListView */ = {
 			isa = PBXGroup;
 			children = (
-				90196C412A6BE8A7008C0841 /* Characters.swift */,
+				90196C5E2A729B75008C0841 /* CellClass */,
+				90196C5D2A71E318008C0841 /* Model */,
 				90196C442A6BEFF1008C0841 /* CharacterListPresenter.swift */,
-				90196C3F2A6BDC5E008C0841 /* CharacterCell.swift */,
 				90196C132A69C839008C0841 /* CharacterListViewController.swift */,
 				90196C492A6C00D9008C0841 /* CharacterListViewConfigurator.swift */,
 				90196C592A7081FE008C0841 /* CharacterListViewRouter.swift */,
@@ -179,6 +181,7 @@
 		90196C4B2A6D3DB6008C0841 /* CharacterDetailView */ = {
 			isa = PBXGroup;
 			children = (
+				90196C5F2A729BA6008C0841 /* Model */,
 				90196C4C2A6D3DFE008C0841 /* CharacterDetailViewController.swift */,
 				90196C512A6DA234008C0841 /* CharacterDetailCell.swift */,
 				90196C532A6F1361008C0841 /* CharacterDetailPresenter.swift */,
@@ -196,6 +199,30 @@
 				90196C5B2A7083CC008C0841 /* CharacterDetailDataManager.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		90196C5D2A71E318008C0841 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				90196C412A6BE8A7008C0841 /* Characters.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		90196C5E2A729B75008C0841 /* CellClass */ = {
+			isa = PBXGroup;
+			children = (
+				90196C3F2A6BDC5E008C0841 /* CharacterCell.swift */,
+			);
+			path = CellClass;
+			sourceTree = "<group>";
+		};
+		90196C5F2A729BA6008C0841 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				90196C602A729BBD008C0841 /* Episode.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -332,6 +359,7 @@
 				90196C5C2A7083CC008C0841 /* CharacterDetailDataManager.swift in Sources */,
 				90196C452A6BEFF1008C0841 /* CharacterListPresenter.swift in Sources */,
 				90196C142A69C839008C0841 /* CharacterListViewController.swift in Sources */,
+				90196C612A729BBD008C0841 /* Episode.swift in Sources */,
 				90196C102A69C839008C0841 /* AppDelegate.swift in Sources */,
 				90196C582A706119008C0841 /* CharacterDetailViewConfigurator.swift in Sources */,
 				90196C502A6D4957008C0841 /* CharacterDataManager.swift in Sources */,

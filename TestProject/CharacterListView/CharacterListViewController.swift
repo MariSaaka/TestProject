@@ -11,6 +11,7 @@ import UIKit
 protocol CharacterListViewProtocol: AnyObject {
     func updateList()
     func updateImage(at index: Int)
+    func disappearSpinnerView()
 }
 
 class CharacterListViewController: UIViewController {
@@ -22,13 +23,17 @@ class CharacterListViewController: UIViewController {
         return tableView
     }()
     
-    private var searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        return searchBar
-    }()
-    
+    let searchController = UISearchController(searchResultsController: nil)
     private var presenter: CharacterListPresenter
     private var page = 1
+    
+    var isSearchBarEmpty: Bool {
+      return searchController.searchBar.text?.isEmpty ?? true
+    }
+    var isFiltering: Bool {
+      return searchController.isActive && !isSearchBarEmpty
+    }
+
     
     // MARK: - Init
     init(presenter: CharacterListPresenter) {
@@ -79,10 +84,11 @@ class CharacterListViewController: UIViewController {
     }
     
     private func setUpSearchBar() {
-        searchBar.delegate = self
-        let frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 50)
-        searchBar = UISearchBar(frame: frame)
-        tableView.tableHeaderView = searchBar
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Search"
+        navigationItem.searchController = searchController
+        definesPresentationContext = true
     }
     
     private func fetchList() {
@@ -94,19 +100,27 @@ class CharacterListViewController: UIViewController {
 // MARK: - UITableView
 extension CharacterListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if isFiltering {
+            return presenter.numberOfFilteredCharacters()
+        }
         return presenter.numberOfCharacters()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CharacterCell") as! CharacterCell
-        let characterModel = presenter.getCharacterInfo(at: indexPath.row)
+        let characterModel: CharacterCell.CellModel
+        if isFiltering {
+            characterModel = presenter.getFilteredCharacterModel(at: indexPath.row)
+        }else {
+            characterModel = presenter.getCharacterInfo(at: indexPath.row)
+        }
         cell.configure(with: characterModel)
         cell.selectionStyle = .none
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        presenter.showCharacter(at: indexPath.row)
+        presenter.showCharacter(at: indexPath.row, is: isFiltering)
     }
     
     
@@ -120,12 +134,11 @@ extension CharacterListViewController: UITableViewDelegate, UITableViewDataSourc
     }
 }
 
-
+// MARK: - UIScrollViewDelegate
 extension CharacterListViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let position = scrollView.contentOffset.y
         if position > (tableView.contentSize.height - 100 - scrollView.frame.size.height) {
-            print("fetch more")
             self.tableView.tableFooterView = createSpinnerFooter()
             presenter.fetchMoreCharacters()
         }
@@ -133,13 +146,10 @@ extension CharacterListViewController: UIScrollViewDelegate {
 }
 
 // MARK: - UISearchBarDelegate
-extension CharacterListViewController: UISearchBarDelegate {
-    func searchBarShouldEndEditing(_ searchBar: UISearchBar) -> Bool {
-        searchBar.resignFirstResponder()
-    }
-    
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
+extension CharacterListViewController: UISearchBarDelegate,  UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        let searchBar = searchController.searchBar
+        presenter.filterContentForSearchText(searchText: searchBar.text!)
     }
 }
 
@@ -155,6 +165,12 @@ extension CharacterListViewController: CharacterListViewProtocol {
     func updateList() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
+        }
+    }
+    
+    func disappearSpinnerView() {
+        DispatchQueue.main.async {
+            self.tableView.tableFooterView = nil
         }
     }
 }

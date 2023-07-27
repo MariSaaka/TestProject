@@ -15,12 +15,15 @@ protocol CharacterListPresenter {
     func getCharacterInfo(at index: Int) -> CharacterCell.CellModel
     func fetchMoreCharacters()
     func fetchMoreList(with page: Int)
-    func showCharacter(at index: Int)
+    func showCharacter(at index: Int, is filtered: Bool)
+    func filterContentForSearchText(searchText: String)
+    func numberOfFilteredCharacters() -> Int
+    func getFilteredCharacterModel(at index: Int) -> CharacterCell.CellModel
 }
 
 
 class CharacterListImplementation: CharacterListPresenter {
-    
+ 
     weak var view: CharacterListViewProtocol?
     var characterManager: CharacterDataManager
     var router: CharacterListViewRouter?
@@ -49,7 +52,7 @@ class CharacterListImplementation: CharacterListPresenter {
             self.lastPage += 1
             fetchMoreList(with: lastPage)
         }else {
-            
+            view?.disappearSpinnerView()
         }
     }
     
@@ -64,8 +67,22 @@ class CharacterListImplementation: CharacterListPresenter {
         }
     }
     
-    func showCharacter(at index: Int) {
-        let character = characterManager.getCharacterForNavigation(at: index)
+    func showCharacter(at index: Int, is filtered: Bool) {
+        let character = characterManager.getCharacterForNavigation(at: index, is: filtered)
         self.router?.navigateToCharacterDetailPage(character: character)
+    }
+    
+    func filterContentForSearchText(searchText: String) {
+         characterManager.filterContentForSearchText(searchText: searchText) {
+            view?.updateList()
+        }
+    }
+    
+    func numberOfFilteredCharacters() -> Int {
+        return characterManager.numberOfFilteredCharacters()
+    }
+    
+    func getFilteredCharacterModel(at index: Int) -> CharacterCell.CellModel {
+        return characterManager.getFilteredCharacterModel(at: index)
     }
 }
