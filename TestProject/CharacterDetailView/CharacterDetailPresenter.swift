@@ -9,11 +9,14 @@ import Foundation
 
 protocol CharacterDetailPresenter {
     var view: CharacterDetailViewProtocol? { get set }
+    func viewDidLoad()
     func getCharacterDetails() -> CharacterDetailCell.Model
-    func getEpisodes() -> [String]
+    func getEpisode(at index: Int) -> EpisodeHeaderCell.CellModel
+    func numberOfEpisodes() -> Int
 }
 
 class CharacterDetailImplementation: CharacterDetailPresenter {
+    
     weak var view: CharacterDetailViewProtocol?
     var characterManager: CharacterDetailDataManager
     
@@ -22,13 +25,28 @@ class CharacterDetailImplementation: CharacterDetailPresenter {
         self.characterManager = manager
     }
 
+    
+    func viewDidLoad() {
+        characterManager.fechEpisodes { result in
+            switch result {
+            case .success(let episodes):
+                self.view?.updateUI()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
     func getCharacterDetails() -> CharacterDetailCell.Model {
         let characterModel = characterManager.getCharacterModel()
         return characterModel
     }
     
-    func getEpisodes() -> [String] {
-        return characterManager.getEpisodes()
+    func getEpisode(at index: Int) -> EpisodeHeaderCell.CellModel {
+        return characterManager.getEpisodeModel(at: index)
     }
     
+    func numberOfEpisodes() -> Int {
+        return characterManager.numberOfEpisodes()
+    }
 }

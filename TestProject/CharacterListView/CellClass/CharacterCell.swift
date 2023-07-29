@@ -137,10 +137,12 @@ class CharacterCell: UITableViewCell {
     func configure(with model: Model) {
         self.characterName.text = model.name
         self.characterGender.text = model.status
+        self.characterImage.loaderView?.isHidden = false
         ImageManager.downloadImage(from: model.image) { result in
             switch result {
             case .success(let image):
                 DispatchQueue.main.async {
+                    self.characterImage.loaderView?.isHidden = true
                     self.characterImage.image = image
                 }
             case .failure(_ ):

@@ -9,16 +9,22 @@ import Foundation
 
 protocol CharacterDetailDataManagerProtocol {
     func getCharacterModel() -> CharacterDetailCell.CellModel
-    func getEpisodes() -> [String]
+    func fechEpisodes(handler: @escaping ((Result<[Episode], APIError>) -> Void))
+    func numberOfEpisodes() -> Int
+    func getEpisodeModel(at index: Int) -> EpisodeHeaderCell.CellModel
 }
 
 class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
-   
+    let api = EpisodesAPIManager()
     var character: Character
     var episodes: [String]  = []
+    var episodesArray: [Episode] = []
+    var numOfEpisodes = 0
+    
     
     init(character: Character) {
         self.character = character
+        self.episodes = character.episodes
     }
     
     func getCharacterModel() -> CharacterDetailCell.CellModel {
@@ -30,7 +36,27 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
                      location: character.location.name)
     }
     
-    func getEpisodes() -> [String] {
-        return character.episodes
+    
+    func fechEpisodes(handler: @escaping ((Result<[Episode], APIError>) -> Void)) {
+        api.fetchEpisodes(episodes: episodes) { result in
+            switch result {
+            case.success(let episodes):
+                self.episodesArray = episodes
+                self.numOfEpisodes = self.episodesArray.count
+                print(episodes)
+            case .failure(let error):
+                print(error)
+            }
+            handler(result)
+        }
+    }
+    
+    func numberOfEpisodes() -> Int {
+        return self.numOfEpisodes
+    }
+    
+    func getEpisodeModel(at index: Int) -> EpisodeHeaderCell.CellModel {
+        let episode = episodesArray[index]
+        return .init(name: episode.name)
     }
 }

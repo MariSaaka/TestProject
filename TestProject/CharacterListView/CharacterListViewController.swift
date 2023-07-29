@@ -10,7 +10,6 @@ import UIKit
 
 protocol CharacterListViewProtocol: AnyObject {
     func updateList()
-    func updateImage(at index: Int)
     func disappearSpinnerView()
 }
 
@@ -153,14 +152,8 @@ extension CharacterListViewController: UISearchBarDelegate,  UISearchResultsUpda
     }
 }
 
-
-
 // MARK: - CharacterListViewProtocol
 extension CharacterListViewController: CharacterListViewProtocol {
-    func updateImage(at index: Int) {
-        self.tableView.reloadRows(at: [IndexPath(row: index, section: 0)],
-                                  with: .automatic)
-    }
     
     func updateList() {
         DispatchQueue.main.async {
