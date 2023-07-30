@@ -13,6 +13,7 @@ protocol CharacterDetailPresenter {
     func getCharacterDetails() -> CharacterDetailCell.Model
     func getEpisode(at index: Int) -> EpisodeHeaderCell.CellModel
     func numberOfEpisodes() -> Int
+    func getEpisodeCharacters(at index: Int) -> [Character]?
 }
 
 class CharacterDetailImplementation: CharacterDetailPresenter {
@@ -48,5 +49,16 @@ class CharacterDetailImplementation: CharacterDetailPresenter {
     
     func numberOfEpisodes() -> Int {
         return characterManager.numberOfEpisodes()
+    }
+    
+    func getEpisodeCharacters(at index: Int) -> [Character]? {
+        if let characters = characterManager.getEpisodeCharactersData(at: index - 1) {
+            return characters
+        }else {
+            characterManager.fetchEpisodeCharacters(at: index - 1) {
+                self.view?.updateSection(at: index)
+            }
+            return nil
+        }
     }
 }

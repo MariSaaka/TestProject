@@ -49,6 +49,48 @@ class EpisodesAPIManager {
                 }
             }.resume()
     }
+    
+    
+    func fetchEpisodeCharacters(with characters: [String], completion: @escaping ((Result<[Character], APIError>) -> Void)) {
+        var resultArray: [Character] = []
+        if !characters.isEmpty {
+            characters.forEach { character in
+                let url = URL(string: character)
+                guard let url else { return }
+                fetchCharacter(with: url) { result in
+                    switch result {
+                    case .success(let character):
+                        resultArray.append(character)
+                    case .failure(let error):
+                        print(error)
+                    }
+                    self.group.leave()
+                }
+            }
+            group.notify(queue: .global()) {
+                completion(.success(resultArray))
+            }
+        }
+    }
+    
+    
+    func fetchCharacter(with url: URL, completion: @escaping ((Result<Character, APIError>) -> Void)) {
+        self.group.enter()
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard let data = data, error == nil else {
+                completion(.failure(.errorDecode))
+                return
+            }
+            do {
+                let decoder = JSONDecoder()
+                let response = try decoder.decode(Character.self, from: data)
+                completion(.success(response))
+            } catch {
+                completion(.failure(.errorDecode))
+            }
+        }.resume()
+    }
+    
 }
 
 //class EpisodesAPIManager {

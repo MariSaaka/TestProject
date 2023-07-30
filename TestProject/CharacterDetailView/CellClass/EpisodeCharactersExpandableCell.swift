@@ -10,6 +10,7 @@ import UIKit
 class EpisodeCharactersExpandableCell: UICollectionViewCell {
 
     var childCollectionView: UICollectionView!
+    var episodeCharacters : [Character]? 
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,6 +21,11 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        episodeCharacters = nil
+    }
+    
     private func setupChildCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -30,11 +36,12 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
         childCollectionView.dataSource = self
         childCollectionView.delegate = self
 
-    
         childCollectionView.register(ChildCollectionViewCell.self, forCellWithReuseIdentifier: ChildCollectionViewCell.reuseIdentifier)
-
         addSubview(childCollectionView)
-
+        addConstraints()
+    }
+    
+    private func addConstraints() {
         NSLayoutConstraint.activate([
             childCollectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             childCollectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
@@ -42,16 +49,31 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
             childCollectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
+    
+    func updateWith(characters: [Character]?) {
+        self.episodeCharacters = characters
+        DispatchQueue.main.async {
+            self.childCollectionView.reloadData()
+        }
+    }
 }
 
-extension EpisodeCharactersExpandableCell: UICollectionViewDataSource, UICollectionViewDelegate {
+extension EpisodeCharactersExpandableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return episodeCharacters?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ChildCollectionViewCell.reuseIdentifier, for: indexPath) as! ChildCollectionViewCell
+        if let episodeCharacters = episodeCharacters {
+            let character = episodeCharacters[indexPath.row]
+            cell.configure(with: character)
+        }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: 120, height: 120)
     }
 }

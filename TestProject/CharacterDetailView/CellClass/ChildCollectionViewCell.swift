@@ -12,8 +12,11 @@ class ChildCollectionViewCell: UICollectionViewCell {
 
     private var characterImage: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(systemName: "heart.fill")!
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.widthAnchor.constraint(equalToConstant: 120),
+            imageView.heightAnchor.constraint(equalToConstant: 120)
+        ])
         return imageView
     }()
     
@@ -26,6 +29,10 @@ class ChildCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        characterImage.image = nil
+    }
     
     private func setUp() {
         addSubviews()
@@ -38,12 +45,25 @@ class ChildCollectionViewCell: UICollectionViewCell {
     
     private func addConstraints() {
         NSLayoutConstraint.activate([
-            characterImage.heightAnchor.constraint(equalToConstant: 80),
-            characterImage.widthAnchor.constraint(equalToConstant: 80),
             characterImage.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 4),
             characterImage.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -4),
             characterImage.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 4),
             characterImage.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -4),
         ])
+    }
+    
+    func configure(with model: Character) {
+        self.characterImage.loaderView?.isHidden = false
+        ImageManager.downloadImage(from: model.image) { result in
+            switch result {
+            case .success(let image):
+                DispatchQueue.main.async {
+                    self.characterImage.loaderView?.isHidden = true
+                    self.characterImage.image = image
+                }
+            case .failure(_ ):
+                break
+            }
+        }
     }
 }

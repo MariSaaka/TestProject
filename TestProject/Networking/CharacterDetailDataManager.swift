@@ -12,6 +12,7 @@ protocol CharacterDetailDataManagerProtocol {
     func fechEpisodes(handler: @escaping ((Result<[Episode], APIError>) -> Void))
     func numberOfEpisodes() -> Int
     func getEpisodeModel(at index: Int) -> EpisodeHeaderCell.CellModel
+    func fetchEpisodeCharacters(at index: Int, handler: @escaping () -> Void)
 }
 
 class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
@@ -19,7 +20,10 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
     var character: Character
     var episodes: [String]  = []
     var episodesArray: [Episode] = []
+    var charactersFromEpisodes: [Int: [String]] = [:]
+    var episodeCharacters: [Int: [Character]] = [:]
     var numOfEpisodes = 0
+    var concurrentQueue = DispatchQueue(label: "queue", attributes: .concurrent)
     
     
     init(character: Character) {
@@ -43,6 +47,9 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
             case.success(let episodes):
                 self.episodesArray = episodes
                 self.numOfEpisodes = self.episodesArray.count
+                episodes.enumerated().forEach { index, episode in
+                    self.charactersFromEpisodes[index] = episode.characters
+                }
                 print(episodes)
             case .failure(let error):
                 print(error)
@@ -58,5 +65,33 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
     func getEpisodeModel(at index: Int) -> EpisodeHeaderCell.CellModel {
         let episode = episodesArray[index]
         return .init(name: episode.name)
+    }
+    
+    func fetchEpisodeCharacters(at index: Int, handler: @escaping () -> Void) {
+        let episodeCharacters = charactersFromEpisodes[index]
+        guard let episodeCharacters else { return }
+        api.fetchEpisodeCharacters(with: episodeCharacters) { result in
+            switch result {
+            case .success(let characters):
+                self.concurrentQueue.async {
+                    self.updateDictionary(key: index, value: characters)
+                }
+                handler()
+            case .failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func updateDictionary(key: Int, value: [Character]) {
+        concurrentQueue.async(flags: .barrier) {
+            self.episodeCharacters.updateValue(value, forKey: key)
+        }
+    }
+    
+    func getEpisodeCharactersData(at index: Int) -> [Character]? {
+        guard let characters = episodeCharacters[index]
+        else { return nil }
+        return characters
     }
 }

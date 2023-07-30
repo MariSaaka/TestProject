@@ -10,6 +10,7 @@ import UIKit
 protocol CharacterDetailViewProtocol: AnyObject {
     func setUpCharacterDetails()
     func updateUI()
+    func updateSection(at index: Int)
 }
 
 class CharacterDetailViewController: UIViewController {
@@ -69,14 +70,14 @@ class CharacterDetailViewController: UIViewController {
 extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return  2
+        return  1 + presenter.numberOfEpisodes() 
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         }
-        return 2 * presenter.numberOfEpisodes()
+        return 2
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -85,20 +86,21 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
             let character = presenter.getCharacterDetails()
             cell.configure(with: character)
             return cell
-        }
-        if indexPath.section == 1 {
-            if indexPath.row % 2 == 0 {
+        } else {
+            if indexPath.row == 0  {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EpisodeExpandableHeaderCell", for: indexPath) as! EpisodeHeaderCell
-                let episode = presenter.getEpisode(at: indexPath.row / 2)
+                let episode = presenter.getEpisode(at: indexPath.section - 1)
                 
                 cell.configure(with: episode)
                 return cell
             }else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EpisodeCharactersExpandableCell", for: indexPath) as! EpisodeCharactersExpandableCell
+             
+                let cellModel = presenter.getEpisodeCharacters(at: indexPath.section)
+                cell.updateWith(characters: cellModel)
                 return cell
             }
         }
-        return UICollectionViewCell()
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -106,18 +108,32 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
         switch (indexPath.section, indexPath.row ) {
         case(0, 0):
             return CGSize(width: collectionView.bounds.size.width, height: 400)
-        case(1, let row) where row % 2 == 0:
+        case(_ , let row) where row % 2 == 0:
             return CGSize(width: collectionView.bounds.size.width, height: 40)
-        case(1, let row) where row % 2 != 0:
-            return CGSize(width: collectionView.bounds.size.width, height: 80)
+        case(_ , let row) where row % 2 != 0:
+            return CGSize(width: collectionView.bounds.size.width, height: 180)
         default:
             return CGSize(width: collectionView.bounds.size.width, height: 40)
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        if section == 0 {
+            return UIEdgeInsets(top: 4, left: 4, bottom: 20, right: 4)
+        }
+        return UIEdgeInsets(top: 8, left: 4, bottom: 0, right: 4)
     }
 }
 
 //MARK: - CharacterDetailViewProtocol
 extension CharacterDetailViewController: CharacterDetailViewProtocol {
+    func updateSection(at index: Int) {
+        let indexSet = IndexSet(integer: index)
+        DispatchQueue.main.async {
+            self.collectionView.reloadSections(indexSet)
+        }
+    }
+    
     func setUpCharacterDetails() {
         DispatchQueue.main.async {
             self.collectionView.reloadData()
