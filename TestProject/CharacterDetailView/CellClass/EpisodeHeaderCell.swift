@@ -60,10 +60,10 @@ class EpisodeHeaderCell: UICollectionViewCell {
     
     private func addConstraints() {
         NSLayoutConstraint.activate([
-            titleView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 4),
-            titleView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor, constant: -4),
-            titleView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor, constant: 4),
-            titleView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor, constant: -4),
+            titleView.topAnchor.constraint(equalTo: self.contentView.topAnchor),
+            titleView.bottomAnchor.constraint(equalTo: self.contentView.bottomAnchor),
+            titleView.leftAnchor.constraint(equalTo: self.contentView.leftAnchor),
+            titleView.rightAnchor.constraint(equalTo: self.contentView.rightAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 30),
             titleLabel.centerXAnchor.constraint(equalTo: titleView.centerXAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: titleView.centerYAnchor)

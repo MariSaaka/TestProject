@@ -17,7 +17,7 @@ class CharacterDetailViewConfigurator {
     func createCharacterDetailViewController(viewController: CharacterDetailViewController)  {
         let manager = CharacterDetailDataManager(character: character)
         let router = CharacterListViewRouter(with: viewController)
-        var presenter: CharacterDetailPresenter = CharacterDetailImplementation(manager: manager, router: router)
+        let presenter: CharacterDetailPresenter = CharacterDetailImplementation(manager: manager, router: router)
         viewController.presenter = presenter
         presenter.view = viewController
     }

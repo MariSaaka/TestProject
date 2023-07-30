@@ -15,13 +15,13 @@ protocol CharacterDetailViewProtocol: AnyObject {
 
 class CharacterDetailViewController: UIViewController {
 
+    //MARK: - Private Variables
     private var collectionView: UICollectionView!
     var presenter: CharacterDetailPresenter?
-    var index: Int = 0
-    var characterId: Int = 0
+    var numberOfEpisodes = 0
+    var sectionIsExpanded: [Int : Bool] = [:]
     
     // MARK: - Init
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -36,6 +36,7 @@ class CharacterDetailViewController: UIViewController {
         super.viewDidLoad()
         configureCollectionView()
         fetchEpisodes()
+        fillSectionArray()
     }
 
     //MARK: - Private Functions
@@ -63,6 +64,13 @@ class CharacterDetailViewController: UIViewController {
     
     private func fetchEpisodes() {
         presenter?.viewDidLoad()
+        numberOfEpisodes = presenter?.numberOfEpisodes() ?? 0
+    }
+    
+    private func fillSectionArray() {
+        for section in 0...numberOfEpisodes {
+            sectionIsExpanded[section] = false
+        }
     }
 }
 
@@ -78,7 +86,7 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
         if section == 0 {
             return 1
         }
-        return 2
+        return sectionIsExpanded[section] == true ? 2 : 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -94,7 +102,6 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
                 if let episode = presenter?.getEpisode(at: indexPath.section - 1) {
                     cell.configure(with: episode)
                 }
-                
                 return cell
             }else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EpisodeCharactersExpandableCell", for: indexPath) as! EpisodeCharactersExpandableCell
@@ -107,6 +114,20 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section != 0 {
+            if indexPath.row == 0 {
+                let section = indexPath.section
+                if let isExpanded = sectionIsExpanded[section] {
+                    sectionIsExpanded[section] = !isExpanded
+                    collectionView.performBatchUpdates({
+                        collectionView.reloadSections(IndexSet(integer: section))
+                    }, completion: nil)
+                }
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         switch (indexPath.section, indexPath.row ) {
@@ -115,7 +136,11 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
         case(_ , let row) where row % 2 == 0:
             return CGSize(width: collectionView.bounds.size.width, height: 40)
         case(_ , let row) where row % 2 != 0:
-            return CGSize(width: collectionView.bounds.size.width, height: 140)
+            if indexPath.row == 1 && sectionIsExpanded[indexPath.section] == false {
+                return CGSize(width: 0, height: 0)
+            } else {
+                return CGSize(width: collectionView.bounds.size.width, height: 140)
+            }
         default:
             return CGSize(width: collectionView.bounds.size.width, height: 40)
         }

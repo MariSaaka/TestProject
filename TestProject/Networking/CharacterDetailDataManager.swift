@@ -29,6 +29,7 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
     init(character: Character) {
         self.character = character
         self.episodes = character.episodes
+        self.numOfEpisodes = character.episodes.count
     }
     
     func getCharacterModel() -> CharacterDetailCell.CellModel {
@@ -50,7 +51,6 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
                 episodes.enumerated().forEach { index, episode in
                     self.charactersFromEpisodes[index] = episode.characters
                 }
-                print(episodes)
             case .failure(let error):
                 print(error)
             }

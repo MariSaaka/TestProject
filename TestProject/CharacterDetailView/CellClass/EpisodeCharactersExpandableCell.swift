@@ -7,12 +7,18 @@
 
 import UIKit
 
+protocol EpisodeCharactersExpandableCellDelegate: AnyObject {
+    func selectCharacter(character: Character)
+}
+
+
 class EpisodeCharactersExpandableCell: UICollectionViewCell {
 
     var childCollectionView: UICollectionView!
     var episodeCharacters : [Character]?
     weak var delegate: EpisodeCharactersExpandableCellDelegate?
 
+    //MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = UIColor.viewBackgroundColor
@@ -23,6 +29,7 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    //MARK: - Private Functions
     private func setupChildCollectionView() {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
@@ -55,6 +62,7 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
     }
 }
 
+//MARK: - UICollectionView
 extension EpisodeCharactersExpandableCell: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -83,7 +91,3 @@ extension EpisodeCharactersExpandableCell: UICollectionViewDataSource, UICollect
     }
 }
 
-
-protocol EpisodeCharactersExpandableCellDelegate: AnyObject {
-    func selectCharacter(character: Character)
-}

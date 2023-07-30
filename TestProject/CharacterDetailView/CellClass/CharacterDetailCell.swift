@@ -122,15 +122,7 @@ class CharacterDetailCell: UICollectionViewCell {
     }
     
     private func supportDarkMode() {
-        contentView.backgroundColor =
-        UIColor { traitCollection in
-            switch traitCollection.userInterfaceStyle {
-            case .dark:
-                return UIColor(white: 0.3, alpha: 1.0)
-            default:
-                return UIColor(white: 1, alpha: 1.0)
-            }
-        }
+        contentView.backgroundColor = UIColor.viewBackgroundColor
     }
     
    
