@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol CharacterDetailPresenter {
+protocol CharacterDetailPresenter: EpisodeCharactersExpandableCellDelegate {
     var view: CharacterDetailViewProtocol? { get set }
     func viewDidLoad()
     func getCharacterDetails() -> CharacterDetailCell.Model
@@ -17,20 +17,21 @@ protocol CharacterDetailPresenter {
 }
 
 class CharacterDetailImplementation: CharacterDetailPresenter {
-    
+   
     weak var view: CharacterDetailViewProtocol?
     var characterManager: CharacterDetailDataManager
+    var router: CharacterListViewRouter?
     
-    
-    init(manager: CharacterDetailDataManager) {
+    init(manager: CharacterDetailDataManager, router: CharacterListViewRouter) {
         self.characterManager = manager
+        self.router = router
     }
 
     
     func viewDidLoad() {
         characterManager.fechEpisodes { result in
             switch result {
-            case .success(let episodes):
+            case .success( _):
                 self.view?.updateUI()
             case .failure(let error):
                 print(error)
@@ -60,5 +61,9 @@ class CharacterDetailImplementation: CharacterDetailPresenter {
             }
             return nil
         }
+    }
+    
+    func selectCharacter(character: Character) {
+        router?.navigateToCharacterDetailPage(character: character)
     }
 }

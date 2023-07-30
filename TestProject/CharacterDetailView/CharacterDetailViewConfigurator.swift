@@ -5,7 +5,7 @@
 //  Created by Mariam Saakashvili on 25/7/23.
 //
 
-import Foundation
+import UIKit
 
 class CharacterDetailViewConfigurator {
     let character: Character
@@ -14,11 +14,11 @@ class CharacterDetailViewConfigurator {
         self.character = character
     }
     
-    func createCharacterDetailViewController() -> CharacterDetailViewController {
+    func createCharacterDetailViewController(viewController: CharacterDetailViewController)  {
         let manager = CharacterDetailDataManager(character: character)
-        var presenter: CharacterDetailPresenter = CharacterDetailImplementation(manager: manager)
-        let detailViewController = CharacterDetailViewController(presenter: presenter)
-        presenter.view = detailViewController
-        return detailViewController
+        let router = CharacterListViewRouter(with: viewController)
+        var presenter: CharacterDetailPresenter = CharacterDetailImplementation(manager: manager, router: router)
+        viewController.presenter = presenter
+        presenter.view = viewController
     }
 }

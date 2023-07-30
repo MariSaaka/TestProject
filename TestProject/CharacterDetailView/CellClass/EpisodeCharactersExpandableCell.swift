@@ -10,7 +10,8 @@ import UIKit
 class EpisodeCharactersExpandableCell: UICollectionViewCell {
 
     var childCollectionView: UICollectionView!
-    var episodeCharacters : [Character]? 
+    var episodeCharacters : [Character]?
+    weak var delegate: EpisodeCharactersExpandableCellDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -21,10 +22,10 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        episodeCharacters = nil
-    }
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        episodeCharacters = nil
+//    }
     
     private func setupChildCollectionView() {
         let layout = UICollectionViewFlowLayout()
@@ -73,7 +74,20 @@ extension EpisodeCharactersExpandableCell: UICollectionViewDataSource, UICollect
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let episodeCharacters = episodeCharacters {
+            let selectedCharacter = episodeCharacters[indexPath.row]
+            print(selectedCharacter.name)
+            self.delegate?.selectCharacter(character: selectedCharacter)
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 120, height: 120)
     }
+}
+
+
+protocol EpisodeCharactersExpandableCellDelegate: AnyObject {
+    func selectCharacter(character: Character)
 }

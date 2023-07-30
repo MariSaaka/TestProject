@@ -20,7 +20,7 @@ class CharacterListViewRouter: CharacterListViewRouterProtocol {
     
     func navigateToCharacterDetailPage(character: Character) {
         let configurator = CharacterDetailViewConfigurator(with: character)
-        let viewController = configurator.createCharacterDetailViewController()
+        let viewController = CharacterDetailViewController(with: configurator)
         controller?.navigationController?.pushViewController(viewController, animated: true)
     }
 }

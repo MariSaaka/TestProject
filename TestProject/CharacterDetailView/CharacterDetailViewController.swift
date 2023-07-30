@@ -16,18 +16,19 @@ protocol CharacterDetailViewProtocol: AnyObject {
 class CharacterDetailViewController: UIViewController {
 
     private var collectionView: UICollectionView!
-    private var presenter: CharacterDetailPresenter
+    var presenter: CharacterDetailPresenter?
     var index: Int = 0
     var characterId: Int = 0
     
     // MARK: - Init
-    init(presenter: CharacterDetailPresenter) {
-        self.presenter = presenter
-        super.init(nibName: nil, bundle: nil)
-    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    init(with configurator: CharacterDetailViewConfigurator) {
+        super.init(nibName: nil, bundle: nil)
+        configurator.createCharacterDetailViewController(viewController: self)
     }
     
     //MARK: - viewLifeCycle
@@ -61,7 +62,7 @@ class CharacterDetailViewController: UIViewController {
     }
     
     private func fetchEpisodes() {
-        presenter.viewDidLoad()
+        presenter?.viewDidLoad()
     }
 }
 
@@ -70,7 +71,7 @@ class CharacterDetailViewController: UIViewController {
 extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return  1 + presenter.numberOfEpisodes() 
+        return  1 + (presenter?.numberOfEpisodes() ?? 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -83,20 +84,23 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ContactDetailCell", for: indexPath) as! CharacterDetailCell
-            let character = presenter.getCharacterDetails()
-            cell.configure(with: character)
+            if let character = presenter?.getCharacterDetails() {
+                cell.configure(with: character)
+            }
             return cell
         } else {
             if indexPath.row == 0  {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EpisodeExpandableHeaderCell", for: indexPath) as! EpisodeHeaderCell
-                let episode = presenter.getEpisode(at: indexPath.section - 1)
+                if let episode = presenter?.getEpisode(at: indexPath.section - 1) {
+                    cell.configure(with: episode)
+                }
                 
-                cell.configure(with: episode)
                 return cell
             }else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "EpisodeCharactersExpandableCell", for: indexPath) as! EpisodeCharactersExpandableCell
              
-                let cellModel = presenter.getEpisodeCharacters(at: indexPath.section)
+                cell.delegate = presenter
+                let cellModel = presenter?.getEpisodeCharacters(at: indexPath.section)
                 cell.updateWith(characters: cellModel)
                 return cell
             }

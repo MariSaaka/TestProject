@@ -29,10 +29,10 @@ class ChildCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        characterImage.image = nil
-    }
+//    override func prepareForReuse() {
+//        super.prepareForReuse()
+//        characterImage.image = nil
+//    }
     
     private func setUp() {
         addSubviews()
@@ -53,6 +53,7 @@ class ChildCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(with model: Character) {
+        self.characterImage.image = nil
         self.characterImage.loaderView?.isHidden = false
         ImageManager.downloadImage(from: model.image) { result in
             switch result {
