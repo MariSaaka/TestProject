@@ -115,17 +115,24 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
         case(_ , let row) where row % 2 == 0:
             return CGSize(width: collectionView.bounds.size.width, height: 40)
         case(_ , let row) where row % 2 != 0:
-            return CGSize(width: collectionView.bounds.size.width, height: 180)
+            return CGSize(width: collectionView.bounds.size.width, height: 140)
         default:
             return CGSize(width: collectionView.bounds.size.width, height: 40)
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        if section != 0 {
+            return 0
+        }
+        return 0
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 4, left: 4, bottom: 20, right: 4)
+            return UIEdgeInsets(top: 4, left: 4, bottom: 64, right: 4)
         }
-        return UIEdgeInsets(top: 8, left: 4, bottom: 0, right: 4)
+        return UIEdgeInsets(top: 32, left: 4, bottom: 0, right: 4)
     }
 }
 

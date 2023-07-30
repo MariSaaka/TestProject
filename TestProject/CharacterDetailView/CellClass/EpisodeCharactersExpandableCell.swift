@@ -15,17 +15,13 @@ class EpisodeCharactersExpandableCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+        contentView.backgroundColor = UIColor.viewBackgroundColor
         setupChildCollectionView()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-//    override func prepareForReuse() {
-//        super.prepareForReuse()
-//        episodeCharacters = nil
-//    }
     
     private func setupChildCollectionView() {
         let layout = UICollectionViewFlowLayout()

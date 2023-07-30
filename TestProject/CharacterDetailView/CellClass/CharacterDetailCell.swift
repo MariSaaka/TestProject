@@ -108,16 +108,7 @@ class CharacterDetailCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        let margins = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
-        contentView.frame = contentView.frame.inset(by: margins)
-        contentView.layer.cornerRadius = 8
-        contentView.layer.shadowColor = UIColor.black.cgColor
-        contentView.layer.shadowRadius = 5
-        contentView.layer.shadowOpacity = 0.5
-        contentView.layer.shadowOffset = .zero
-        characterImage.layer.borderWidth = 1
-        characterImage.layer.cornerRadius = 8
+        contentView.applyContentStyle(withShadow: true)
         characterImage.layer.masksToBounds = false
         characterImage.clipsToBounds = true
     }

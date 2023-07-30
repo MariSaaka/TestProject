@@ -42,11 +42,13 @@ class EpisodeHeaderCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.applyContentStyle(withShadow: false)
     }
     
     
     // MARK: - Private Functions
     private func setUp() {
+        contentView.backgroundColor = UIColor.viewBackgroundColor
         addSubviews()
         addConstraints()
     }

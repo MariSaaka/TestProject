@@ -35,6 +35,8 @@
 		90FBE3742A73DEC2007065E0 /* EpisodesAPIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FBE3732A73DEC2007065E0 /* EpisodesAPIManager.swift */; };
 		90FBE3762A75B9A2007065E0 /* Extension+UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FBE3752A75B9A2007065E0 /* Extension+UIImageView.swift */; };
 		90FBE3792A75BFF3007065E0 /* ChildCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FBE3782A75BFF3007065E0 /* ChildCollectionViewCell.swift */; };
+		90FBE37B2A76EBF0007065E0 /* Extension+UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FBE37A2A76EBF0007065E0 /* Extension+UIColor.swift */; };
+		90FBE37D2A76EE35007065E0 /* Extension+UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90FBE37C2A76EE35007065E0 /* Extension+UIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +89,8 @@
 		90FBE3732A73DEC2007065E0 /* EpisodesAPIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodesAPIManager.swift; sourceTree = "<group>"; };
 		90FBE3752A75B9A2007065E0 /* Extension+UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIImageView.swift"; sourceTree = "<group>"; };
 		90FBE3782A75BFF3007065E0 /* ChildCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildCollectionViewCell.swift; sourceTree = "<group>"; };
+		90FBE37A2A76EBF0007065E0 /* Extension+UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIColor.swift"; sourceTree = "<group>"; };
+		90FBE37C2A76EE35007065E0 /* Extension+UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extension+UIView.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,6 +256,8 @@
 			isa = PBXGroup;
 			children = (
 				90FBE3752A75B9A2007065E0 /* Extension+UIImageView.swift */,
+				90FBE37A2A76EBF0007065E0 /* Extension+UIColor.swift */,
+				90FBE37C2A76EE35007065E0 /* Extension+UIView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -389,6 +395,7 @@
 			files = (
 				90196C5C2A7083CC008C0841 /* CharacterDetailDataManager.swift in Sources */,
 				90FBE3762A75B9A2007065E0 /* Extension+UIImageView.swift in Sources */,
+				90FBE37D2A76EE35007065E0 /* Extension+UIView.swift in Sources */,
 				90196C452A6BEFF1008C0841 /* CharacterListPresenter.swift in Sources */,
 				90196C142A69C839008C0841 /* CharacterListViewController.swift in Sources */,
 				90196C612A729BBD008C0841 /* Episode.swift in Sources */,
@@ -401,6 +408,7 @@
 				90196C522A6DA234008C0841 /* CharacterDetailCell.swift in Sources */,
 				90196C542A6F1361008C0841 /* CharacterDetailPresenter.swift in Sources */,
 				90196C4A2A6C00D9008C0841 /* CharacterListViewConfigurator.swift in Sources */,
+				90FBE37B2A76EBF0007065E0 /* Extension+UIColor.swift in Sources */,
 				90196C632A7313A3008C0841 /* EpisodeHeaderCell.swift in Sources */,
 				90196C5A2A7081FE008C0841 /* CharacterListViewRouter.swift in Sources */,
 				90196C482A6BFB37008C0841 /* RickAndMortyAPIManager.swift in Sources */,
