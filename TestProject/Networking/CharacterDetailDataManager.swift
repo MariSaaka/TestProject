@@ -19,7 +19,7 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
     let api = EpisodesAPIManager()
     var character: Character
     var episodes: [String]  = []
-    var episodesArray: [Episode] = []
+    var episodesArray: [Episode]?
     var charactersFromEpisodes: [Int: [String]] = [:]
     var episodeCharacters: [Int: [Character]] = [:]
     var numOfEpisodes = 0
@@ -47,7 +47,6 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
             switch result {
             case.success(let episodes):
                 self.episodesArray = episodes
-                self.numOfEpisodes = self.episodesArray.count
                 episodes.enumerated().forEach { index, episode in
                     self.charactersFromEpisodes[index] = episode.characters
                 }
@@ -63,8 +62,9 @@ class CharacterDetailDataManager: CharacterDetailDataManagerProtocol {
     }
     
     func getEpisodeModel(at index: Int) -> EpisodeHeaderCell.CellModel {
-        let episode = episodesArray[index]
-        return .init(name: episode.name)
+        guard let episodes = episodesArray else { return .init(name: "")}
+            let episode = episodes[index]
+            return .init(name: episode.name)
     }
     
     func fetchEpisodeCharacters(at index: Int, handler: @escaping () -> Void) {

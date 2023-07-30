@@ -155,9 +155,9 @@ extension CharacterDetailViewController: UICollectionViewDelegate, UICollectionV
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 4, left: 4, bottom: 64, right: 4)
+            return UIEdgeInsets(top: 4, left: 0, bottom: 64, right: 0)
         }
-        return UIEdgeInsets(top: 32, left: 4, bottom: 0, right: 4)
+        return UIEdgeInsets(top: 32, left: 0, bottom: 0, right: 0)
     }
 }
 
